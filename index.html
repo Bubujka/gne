@@ -112,13 +112,24 @@
 
     $scope.describe_genome = function(k){
       var ret = []
+      if(k.indexOf("PP") != -1)
+        return '<span style="color:red">труп</span>';
+      
       if(k.indexOf("WW") != -1){
-        ret.push('Белый');
+        return 'Белый';
       }
-      if(k.indexOf("PP") != -1){
-        ret.push('<span style="color:red">труп</span>');
+      for(var i in $scope.recessive){
+        var gene = $scope.recessive[i]
+        if(k.indexOf(gene.toUpperCase() + gene.toUpperCase()) != -1)
+          ret.push($scope.gene_name[gene]);
       }
-
+      for(var i in $scope.dominant){
+        var gene = $scope.dominant[i]
+        if(k.indexOf(gene.toUpperCase() + gene.toUpperCase()) != -1)
+          ret.push($scope.gene_name[gene]);
+        if(k.indexOf(gene.toUpperCase() + gene) != -1)
+          ret.push($scope.gene_name[gene]);
+      }
       if(ret.length == 0)
         return 'Чертпоймичто'
       else
