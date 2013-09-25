@@ -23,7 +23,7 @@
             <select ng-model='male[v]'>
              <option value=0>нет</option>
              <option value=1>Носитель</option> 
-             <option value=2>Двухфакторный</option>   
+             <option value=2 ng-hide="v=='p'">Двухфакторный</option>   
             </select>                    
         </div>
       </td>
@@ -36,7 +36,7 @@
             <select ng-model='female[v]'>
              <option value=0>нет</option>
              <option value=1>Носительница</option> 
-             <option value=2>Двухфакторный</option>   
+             <option value=2 ng-hide="v=='p'">Двухфакторный</option>   
             </select>                    
         </div>
       </td>            
@@ -132,7 +132,7 @@
           ret.push($scope.gene_name[gene]);
       }
       if(ret.length == 0)
-        return 'Чертпоймичто'
+        return 'Природный окрас'
       else
         return ret.join(', ')
     }
