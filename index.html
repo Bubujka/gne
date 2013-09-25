@@ -52,11 +52,14 @@
   <hr>
   <button ng-click='calculate()'>Расчитать результаты</button>
   <hr>
-  <ul class='results'>
-    <li ng-repeat="(k, v) in by_name">
-      <span ng-bind-html-unsafe="describe_genome(v.name)"></span> - <b>{{v.count / 65536 * 100}}%</b>
-    </li>
-  </ul>
+  <table class='table'>
+    <tr ng-repeat="(k, v) in by_name">
+      <td>
+        <span ng-bind-html-unsafe="k"></span> 
+      </td>
+      <td><b>{{v}}%</b></td>
+    </tr>
+  </table>
 </div>
 <script>
   function Dog(){
@@ -113,16 +116,16 @@
 
     $scope.describe_genome = function(k){
       var ret = []
+      var nos = []
       if(k.indexOf("PP") != -1)
-        return '<span style="color:red">летальные гены</span>';
+        res.push('<span style="color:red">летальные гены</span>')
       
-      if(k.indexOf("WW") != -1){
-        return 'Белый';
-      }
       for(var i in $scope.recessive){
         var gene = $scope.recessive[i]
         if(k.indexOf(gene.toUpperCase() + gene.toUpperCase()) != -1)
           ret.push($scope.gene_name[gene]);
+        if(k.indexOf(gene.toUpperCase() + gene) != -1)
+          nos.push($scope.gene_name[gene]);
       }
       for(var i in $scope.dominant){
         var gene = $scope.dominant[i]
@@ -132,9 +135,12 @@
           ret.push($scope.gene_name[gene]);
       }
       if(ret.length == 0)
-        return 'Природный окрас'
+        ret = 'Природный'
       else
-        return ret.join(', ')
+        ret = ret.join(', ')
+      if(nos.length > 0)
+        ret += ('<br><b>Носитель:</b> ' + nos.join(', '))
+      return ret
     }
     $scope.dominant = ['b', 'p', 'pd']
     $scope.recessive =  ['s', 'c', 't', 'w', 'r']
@@ -173,7 +179,17 @@
           by_name[key] = {name: cart_to_name(all[iall]), count: 1}
         }
       }
-      $scope.by_name = by_name
+
+      var by_name_grouped = {}
+      for(var i in by_name){
+        var group = $scope.describe_genome(by_name[i].name)
+        if(by_name_grouped[group]){
+          by_name_grouped[group] += (by_name[i].count / 65536 * 100)
+        }else{
+          by_name_grouped[group] = (by_name[i].count / 65536 * 100)
+        }
+      }
+      $scope.by_name = by_name_grouped
       $scope.results = all
       $scope.$broadcast('results')
       $scope.$broadcast('by_name')
