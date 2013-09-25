@@ -1,30 +1,44 @@
 <html ng-app>
 <script src='angular.min.js'></script>
 <meta charset='utf8'>
-<div ng-controller='GeneCtrl'>
+<link rel='stylesheet' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css'>
+<style>
+  label{
+    width: 160px;
+    margin-left: 10px;
+  }
+</style>
+<div class='container' ng-controller='GeneCtrl'>
 <table>
   <tr>
-      <td>
-          Самец:<br>
-          <div  ng-repeat='v in genes'>
-            {{v}}: <select ng-model='male[v]'>
-               <option value=0>{{v}}{{v}}</option>
-               <option value=1>{{v | uppercase}}{{v}}</option> 
-               <option value=2>{{v | uppercase}}{{v | uppercase}}</option>   
-              </select>                    
-          </div>
+      <td width='400px'>
+        <h3>Самец</h3>
+        <div  ng-repeat='v in genes'>
+          <label>
+            <span>{{gene_name[v]}}<sup>({{v}})</sup></span>:
+          </label>
+            <select ng-model='male[v]'>
+             <option value=0>нет</option>
+             <option value=1>Носитель</option> 
+             <option value=2>Двухфакторный</option>   
+            </select>                    
+        </div>
       </td>
-      <td>Самка:<br>
-         <div  ng-repeat='v in genes'>
-            {{v}}: <select ng-model='female[v]'>
-               <option value=0>{{v}}{{v}}</option>
-               <option value=1>{{v | uppercase}}{{v}}</option> 
-               <option value=2>{{v | uppercase}}{{v | uppercase}}</option>   
-              </select>                    
-          </div>
-          </td>            
-  </tr>
-</table>
+      <td>
+        <h3>Самка</h3>
+        <div  ng-repeat='v in genes'>
+          <label>
+            <span>{{gene_name[v]}}<sup>({{v}})</sup></span>:
+          </label>
+            <select ng-model='female[v]'>
+             <option value=0>нет</option>
+             <option value=1>Носительница</option> 
+             <option value=2>Двухфакторный</option>   
+            </select>                    
+        </div>
+      </td>            
+    </tr>
+  </table>
 
   <hr>
   <div>Самец: {{gene_to_string(male)}}</div>
@@ -33,12 +47,9 @@
   <hr>
   <button ng-click='calculate()'>Расчитать результаты</button>
   <hr>
-  Возможных комбинаций генома: {{results.length}}
-
-  <hr>
   <ul>
     <li ng-repeat="(k, v) in by_name">
-    {{k}} : {{v}}
+    {{k}} : {{v / 65536 * 100}}%
     </li>
   </ul>
 </div>
@@ -75,6 +86,16 @@
     $scope.male = {}
     $scope.female = {}
     $scope.genes = ['b', 'p', 'pd', 's', 'c', 't', 'w', 'r']
+    $scope.gene_name = {
+      s:  'серебристый',
+      c:  'осветленный',
+      w:  'белый',
+      b:  'синеголовый',
+      p:  'золотой жемчуг',
+      r:  'красногрудый',
+      pd:  'пестрый',
+      t: 'смокинг'}
+
     $scope.dominant = ['b', 'p', 'pd']
     $scope.recessive =  ['s', 'c', 't', 'w', 'r']
     $scope.results = []
@@ -123,19 +144,21 @@
     }
     
     $scope.gene_to_string = function(obj){
-      var ret = ''
+      var ret = []
       for(var k in obj){
         if(k != '$$hashKey'){
           var v = parseInt(obj[k])
+          var t = ''
           if(v == 0)
-            ret += k + k
+            t = k + k
           if(v == 1)
-            ret += k.toUpperCase() + k
+            t = k.toUpperCase() + k
           if(v == 2)
-            ret += k.toUpperCase() + k.toUpperCase()
-          }
+            t =  k.toUpperCase() + k.toUpperCase()
+          ret.push(t)
+        }
       }
-      return ret
+      return ret.join('-')
     }
   }
 </script>
