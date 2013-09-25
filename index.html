@@ -44,16 +44,17 @@
   </table>
 
   <hr>
-  <div>Самец: {{gene_to_string(male)}}</div>
+  <div>Самец: </div>
+  <div ng-bind-html-unsafe="describe_genome(gene_to_string(male))"></div>
   <hr>
-  <div>Самка: {{gene_to_string(female)}}</div>
+  <div>Самка: </div>
+  <div ng-bind-html-unsafe="describe_genome(gene_to_string(female))"></div>
   <hr>
   <button ng-click='calculate()'>Расчитать результаты</button>
   <hr>
   <ul class='results'>
     <li ng-repeat="(k, v) in by_name">
-      <span>{{v.name}}: {{v.count / 65536 * 100}}%</span><br>
-      <div ng-bind-html-unsafe="describe_genome(v.name)"></div>
+      <span ng-bind-html-unsafe="describe_genome(v.name)"></span> - <b>{{v.count / 65536 * 100}}%</b>
     </li>
   </ul>
 </div>
