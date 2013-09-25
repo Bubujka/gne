@@ -7,6 +7,9 @@
     width: 160px;
     margin-left: 10px;
   }
+  .results span{
+    font-weight: bold;
+  }
 </style>
 <div class='container' ng-controller='GeneCtrl'>
 <table>
@@ -47,9 +50,10 @@
   <hr>
   <button ng-click='calculate()'>Расчитать результаты</button>
   <hr>
-  <ul>
+  <ul class='results'>
     <li ng-repeat="(k, v) in by_name">
-    {{k}} : {{v / 65536 * 100}}%
+      <span>{{v.name}}: {{v.count / 65536 * 100}}%</span><br>
+      <div ng-bind-html-unsafe="describe_genome(v.name)"></div>
     </li>
   </ul>
 </div>
@@ -61,6 +65,16 @@
       r[list[i]] = 0
     }
     return r
+  }
+  function cart_to_name(a){
+    var ret = []
+    for(var i = 0; i<=15; i+=2){
+      if(a[i + 1].toUpperCase() == a[i + 1])
+        ret.push(a[i+1]+a[i])
+      else
+        ret.push(a[i]+a[i+1])
+    }
+    return ret.join('-');
   }
   function clone(obj){
     return JSON.parse(JSON.stringify(obj))
@@ -96,6 +110,20 @@
       pd:  'пестрый',
       t: 'смокинг'}
 
+    $scope.describe_genome = function(k){
+      var ret = []
+      if(k.indexOf("WW") != -1){
+        ret.push('Белый');
+      }
+      if(k.indexOf("PP") != -1){
+        ret.push('<span style="color:red">труп</span>');
+      }
+
+      if(ret.length == 0)
+        return 'Чертпоймичто'
+      else
+        return ret.join(', ')
+    }
     $scope.dominant = ['b', 'p', 'pd']
     $scope.recessive =  ['s', 'c', 't', 'w', 'r']
     $scope.results = []
@@ -128,9 +156,9 @@
       for(var iall in all){
         var key = all[iall].join("")
         if(by_name[key]){
-          by_name[key]++
+          by_name[key].count++
         }else{
-          by_name[key] = 1
+          by_name[key] = {name: cart_to_name(all[iall]), count: 1}
         }
       }
       $scope.by_name = by_name
