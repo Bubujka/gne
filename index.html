@@ -38,7 +38,6 @@
       </td>            
     </tr>
   </table>
-
   <hr>
   <div>Самец: </div>
   <div ng-bind-html-unsafe="describe_genome(gene_to_string(male))"></div>
@@ -62,7 +61,7 @@
     var r = {}
     var list = ['b', 'p', 'pd', 's', 'c', 't', 'w', 'r'] 
     for(i in list){
-      r[list[i]] = 0
+      r[list[i]] = '0'
     }
     return r
   }
@@ -127,6 +126,8 @@
       var nos = []
       if(k.indexOf("PP") != -1)
         ret.push('<span style="color:red">летальные гены</span>')
+      if(k.indexOf("WW") != -1)
+        ret.push('<span style="background: black; color:white; padding: 2px 5px; font-weight:bold">Белый цвет завуалирует все остальные окрасы</span>')
       
       for(var i in $scope.recessive){
         var gene = $scope.recessive[i]
