@@ -21,9 +21,7 @@
             <span>{{gene_name[v]}}<sup>({{v}})</sup></span>:
           </label>
             <select ng-model='male[v]'>
-             <option value=0>нет</option>
-             <option value=1>один аллель</option> 
-             <option value=2 ng-hide="v=='p'">два аллеля</option>   
+              <option ng-repeat="(k, tv) in gene_variants[v]" value="{{k}}">{{tv}}</option>
             </select>                    
         </div>
       </td>
@@ -34,9 +32,7 @@
             <span>{{gene_name[v]}}<sup>({{v}})</sup></span>:
           </label>
             <select ng-model='female[v]'>
-             <option value=0>нет</option>
-             <option value=1>один аллель</option> 
-             <option value=2 ng-hide="v=='p'">два аллеля</option>   
+              <option ng-repeat="(k, tv) in gene_variants[v]" value="{{k}}">{{tv}}</option>
             </select>                    
         </div>
       </td>            
@@ -113,6 +109,18 @@
       r:  'красногрудый',
       pd:  'пестрый',
       t: 'смокинг'}
+    $scope.gene_variants = {
+      b: { 0: 'нет', 1: 'есть', 2: 'двухфакторный' },
+      pd: { 0: 'нет', 1: 'есть', 2: 'двухфакторный' },
+      p: { 0: 'нет', 1: 'есть' },
+      
+      s: { 0: 'нет', 1: 'носитель', 2: 'есть' },
+      c: { 0: 'нет', 1: 'носитель', 2: 'есть' },
+      w: { 0: 'нет', 1: 'носитель', 2: 'есть' },
+      r: { 0: 'нет', 1: 'носитель', 2: 'есть' },
+      t: { 0: 'нет', 1: 'носитель', 2: 'есть' }
+    }
+
 
     $scope.describe_genome = function(k){
       var ret = []
