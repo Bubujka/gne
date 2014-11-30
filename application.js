@@ -85,7 +85,7 @@ function GeneCtrl($scope){ // jshint ignore:line
     for(i in $scope.dominant){
       gene = $scope.dominant[i];
       if(k.indexOf(gene.toUpperCase() + gene.toUpperCase()) !== -1){
-        ret.push($scope.gene_name[gene]);
+        ret.push($scope.gene_name[gene] + (gene === 'b' ? ' двухфакторный' : ''));
       }
       if(k.indexOf(gene.toUpperCase() + gene) !== -1){
         ret.push($scope.gene_name[gene]);
